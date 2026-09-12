@@ -197,7 +197,7 @@ const templates=[
 {name:"Onam Sadya",cat:"Kerala Trends",colors:["#228B22","#FFD700"],kerala:true,tr:4,desc:"Onam sadya comedy",prompt:"Person at Onam sadya feast, banana leaf, Kerala traditional, photorealistic"},
 ];
 let selected=null, faceData=null, activeCat="Trending", creations=JSON.parse(localStorage.getItem('aininin_creations')||'[]');
-let stream=null, faceDetector=null, detectionRunning=false;
+let stream=null, faceDetector=null, imageFaceDetector=null, detectionRunning=false;
 let lastRealFacePosition=null;
 
 async function initMediaPipe(){
