@@ -201,6 +201,43 @@ let stream=null, faceDetector=null, imageFaceDetector=null, detectionRunning=fal
 let lastRealFacePosition=null;
 
 async function initMediaPipe(){
+   try{
+     if(!window.FilesetResolver){
+        console.log("MediaPipe not yet loaded, retrying...");
+           setTimeout(initMediaPipe,500);
+              return;
+                }
+
+                  const fileset=await window.FilesetResolver.forVisionTasks(
+                     "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
+                       );
+
+                         const model="https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite";
+
+                           faceDetector=await window.MediaPipeFaceDetector.createFromOptions(fileset,{
+                              baseOptions:{
+                                  modelAssetPath:model,
+                                      delegate:"GPU"
+                                         },
+                                            runningMode:"VIDEO",
+                                               minDetectionConfidence:0.35
+                                                 });
+
+                                                   imageFaceDetector=await window.MediaPipeFaceDetector.createFromOptions(fileset,{
+                                                      baseOptions:{
+                                                          modelAssetPath:model,
+                                                              delegate:"GPU"
+                                                                 },
+                                                                    runningMode:"IMAGE",
+                                                                       minDetectionConfidence:0.30
+                                                                         });
+
+                                                                           console.log("MediaPipe ready — VIDEO + IMAGE detection");
+                                                                            }catch(e){
+                                                                              console.log("MediaPipe init failed — whole-image mode remains available:",e);
+                                                                               }
+                                                                               }
+} initMediaPipe(){
  try{
   if(!window.FilesetResolver) { console.log("MediaPipe not yet loaded, retrying..."); setTimeout(initMediaPipe, 500); return; }
   const fileset = await window.FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");
